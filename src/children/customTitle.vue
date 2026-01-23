@@ -1,11 +1,5 @@
 <!--
- * @Author: fanggang
- * @Date: 2023-09-01 13:49:48
- * @LastEditTime: 2023-09-14 18:03:17
- * @LastEditors: fanggang
  * @Description: 自定义标题
- * @FilePath: customTitle.vue
- * Copyright (c) 2023 by Suzhou Tiantian, All Rights Reserved. 
 -->
 <template>
     <div :style="{

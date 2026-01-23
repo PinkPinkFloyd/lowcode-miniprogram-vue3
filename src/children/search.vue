@@ -1,11 +1,5 @@
 <!--
- * @Author: fanggang
- * @Date: 2023-08-31 12:48:06
- * @LastEditTime: 2023-09-24 16:35:00
- * @LastEditors: fanggang
  * @Description: 商品搜索
- * @FilePath: search.vue
- * Copyright (c) 2023 by Suzhou Tiantian, All Rights Reserved. 
 -->
 <template>
     <div :style="{ '--input-clor': data.fontColor,backgroundColor:data.bgColor }" class="mpp-search">

@@ -1,11 +1,5 @@
 <!--
- * @Author: fanggang
- * @Date: 2023-09-01 18:03:22
- * @LastEditTime: 2023-09-04 16:11:23
- * @LastEditors: fanggang
  * @Description: 辅助分割
- * @FilePath: divider.vue
- * Copyright (c) 2023 by Suzhou Tiantian, All Rights Reserved. 
 -->
 
 <template>
