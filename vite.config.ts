@@ -4,6 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 import AutoImport from 'unplugin-auto-import/vite'
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/lowcode-miniprogram-vue3/',
   plugins: [
     vue(),
     tailwindcss(),
