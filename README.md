@@ -1,5 +1,109 @@
-# Vue 3 + TypeScript + Vite
+# Low-code Mini Program Builder
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+一个基于 Vue 3 的小程序页面低代码搭建 Demo。用户可以从组件面板拖入页面模块，在手机画布中调整顺序，并通过右侧配置面板实时修改组件内容和样式。
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+项目从实际小程序装修业务中抽离，保留了页面、组件、配置面板和数据模型之间的核心协作方式，适合作为低代码编辑器和动态组件设计的展示项目。
+
+## 功能
+
+- 左侧“页面 / 组件”双面板切换
+- 小程序页面新增、切换、复制、删除和首页设置入口
+- 从组件库拖拽模块到手机预览画布
+- 画布组件排序、上移、下移、置顶、置底、复制和删除
+- 根据组件类型动态加载对应的展示组件与编辑组件
+- 右侧属性面板实时修改当前组件配置
+- 限制不同组件的最大添加数量
+- 页面背景色、背景图和基础信息配置
+- 支持搜索、轮播图、图文导航、自定义标题、商品和辅助分割组件
+
+## 界面结构
+
+```text
+低代码编辑器
+├── 左侧：页面管理 / 可拖拽组件库
+├── 中间：手机页面实时预览与组件排序
+└── 右侧：当前页面或组件的属性配置
+```
+
+## 技术栈
+
+| 分类 | 技术 |
+| --- | --- |
+| 前端框架 | Vue 3.5、Composition API、`<script setup>` |
+| 开发语言 | TypeScript |
+| 构建工具 | Vite |
+| UI 与样式 | Element Plus、Tailwind CSS、SCSS |
+| 拖拽排序 | vuedraggable |
+| 状态管理 | Pinia、pinia-plugin-persistedstate |
+| 工具库 | Lodash |
+
+## 内置组件
+
+| 组件 | 展示能力 |
+| --- | --- |
+| 页面设置 | 页面名称、背景颜色和背景图片 |
+| 搜索框 | 圆角、吸顶、背景色、框体色和字体色 |
+| 图片广告 | 轮播 / 单图模式、分页样式、间距和跳转配置 |
+| 图文导航 | 图文 / 文字导航、颜色和导航项排序 |
+| 自定义标题 | 主副标题、字号、对齐、颜色和查看更多入口 |
+| 商品 | 商品来源、列表样式、图片比例、间距和卡片样式 |
+| 辅助分割 | 空白占位或分割线样式 |
+
+## 核心设计
+
+### 动态组件映射
+
+`src/children/componentsMap.ts` 统一维护展示组件和编辑组件的异步映射。画布和右侧配置面板只保存组件名称，不需要写大量条件分支即可按需加载对应组件。
+
+### 配置驱动的数据模型
+
+每个页面模块由以下三部分组成：
+
+```ts
+{
+  name: 'swiper',
+  data: { /* 组件配置 */ },
+  flag: 3
+}
+```
+
+- `name` 决定画布使用哪个展示组件。
+- `data` 保存组件内容和样式。
+- `flag` 关联画布实例与右侧编辑器，允许同类型组件存在多个实例。
+
+### 拖拽与实例隔离
+
+`useDrag` 在组件从左侧拖入画布时深拷贝默认配置，并生成新的实例标识，避免多个组件共享同一份响应式数据。画布内部再通过 `vuedraggable` 完成排序。
+
+### 职责拆分
+
+| 模块 | 职责 |
+| --- | --- |
+| `useInit` | 初始化页面、画布字段和编辑器映射 |
+| `useDrag` | 组件克隆、拖入和选中状态联动 |
+| `useLeftPage` | 页面切换与页面管理入口 |
+| `componentsMap` | 展示组件和编辑组件的异步注册 |
+| `App.vue` | 三栏布局与各模块组合 |
+
+## 本地运行
+
+```bash
+npm install
+npm run dev
+```
+
+项目默认由 Vite 启动，终端会显示本地访问地址。
+
+## 当前状态
+
+这是一个从业务系统中抽离的纯前端 Demo，页面数据和商品数据目前使用 Mock。上传、选品、文章选择以及部分页面管理操作保留了接口位置或占位逻辑，后续可接入真实服务。
+
+项目已经完成主要交互与组件模型迁移；严格 TypeScript 生产构建仍有少量待整理项，主要来自原业务选择器尚未接回以及未使用的占位代码。
+
+## 面试讲解重点
+
+1. 使用“组件注册表 + 配置数据”实现低代码页面的动态渲染。
+2. 展示组件与编辑组件成对设计，通过 `v-model` 保持配置和预览同步。
+3. 拖拽时深拷贝默认模型并生成实例标识，解决同类组件之间的数据串联问题。
+4. 将初始化、拖拽和页面管理拆成独立 Hooks，让根组件主要承担编排职责。
+5. 组件数量限制、复制、排序和删除等操作如何共同维护画布与编辑面板的一致性。
